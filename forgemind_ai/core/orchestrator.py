@@ -2,24 +2,30 @@
 ForgeMind Core Orchestrator
 """
 
+from forgemind_ai.core.context_manager import ContextManager
 from forgemind_ai.core.router import Router
-from forgemind_ai.models.career_dna import CareerDNA
 
 
 class ForgeMindOrchestrator:
+    """
+    Coordinates communication between
+    the user and AI agents.
+    """
 
     def __init__(self):
+        self.context = ContextManager()
         self.router = Router()
-        self.career_dna = CareerDNA()
 
     def process(self, user_input: str):
         """
-        Determine which agent should execute.
+        Process a user request.
         """
+
+        career = self.context.load()
 
         agent = self.router.get_agent(user_input)
 
         return {
             "agent": agent.name,
-            "career_dna": self.career_dna.summary()
+            "career": career.summary()
         }
