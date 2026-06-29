@@ -113,3 +113,15 @@ Riyanshi Gaur
 B.Tech AIML Student
 
 Google ADK & Agentic AI Enthusiast
+
+
+
+## Current AI Agents
+
+- ✅ SkillLens – Skill Gap Analysis
+- ✅ ProjectScout – Project Recommendation
+
+Upcoming:
+
+- SprintPlanner
+- PortfolioForge
