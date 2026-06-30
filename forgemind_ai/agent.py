@@ -13,6 +13,7 @@ from forgemind_ai.config.models import DEFAULT_MODEL
 from forgemind_ai.agents.skilllens import skilllens_agent
 from forgemind_ai.agents.projectscout import projectscout_agent
 from forgemind_ai.agents.sprintplanner import sprintplanner_agent
+from forgemind_ai.agents.portfolioforge import portfolioforge_agent
 
 
 root_agent = Agent(
@@ -67,6 +68,15 @@ Delegate to SprintPlanner if the user asks for:
 - learning schedule
 - build plan
 
+Delegate to PortfolioForge if the user asks about:
+
+- resume review
+- GitHub review
+- LinkedIn profile
+- portfolio review
+- improving portfolio
+- improving resume
+
 If the user's primary intent is skill analysis,
 always choose SkillLens.
 
@@ -82,5 +92,6 @@ can answer better.
         skilllens_agent,
         projectscout_agent,
         sprintplanner_agent,
+        portfolioforge_agent
     ],
 )
