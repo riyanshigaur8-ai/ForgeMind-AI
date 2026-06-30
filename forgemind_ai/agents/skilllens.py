@@ -19,8 +19,11 @@ skilllens_agent = Agent(
     model=DEFAULT_MODEL,
     name="skilllens",
     description=(
-        "Analyzes student skills and identifies "
-        "career skill gaps."
+         "Specialist for analyzing student skills, identifying "
+    "skill gaps, recommending technologies to learn, "
+    "career readiness analysis, internship preparation, "
+    "and personalized learning guidance."
+        
     ),
     instruction=SKILLLENS_PROMPT,
 )

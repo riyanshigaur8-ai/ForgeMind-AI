@@ -15,8 +15,9 @@ projectscout_agent = Agent(
     model=DEFAULT_MODEL,
     name="projectscout",
     description=(
-        "Recommends industry-relevant projects "
-        "for students."
+        "Specialist for recommending portfolio projects, "
+    "GitHub projects, software ideas, AI applications, "
+    "technology stacks, and practical implementation ideas."
     ),
     instruction=PROJECTSCOUT_PROMPT,
 )
