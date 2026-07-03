@@ -16,6 +16,8 @@
 
   body {
     @apply bg-surface font-sans text-zinc-100 antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   #root {
@@ -25,10 +27,34 @@
 
 @layer utilities {
   .glass {
-    @apply border border-white/10 bg-white/5 backdrop-blur-xl;
+    @apply border border-white/10 bg-white/[0.04] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl;
   }
 
   .glass-strong {
-    @apply border border-white/10 bg-white/[0.07] backdrop-blur-2xl;
+    @apply border border-white/10 bg-white/[0.06] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl;
+  }
+
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.07)] backdrop-blur-2xl;
+  }
+
+  .text-display {
+    @apply text-balance font-semibold tracking-[-0.04em];
+  }
+
+  .text-body {
+    @apply text-pretty leading-relaxed text-zinc-400;
+  }
+
+  .section-heading {
+    @apply text-balance text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1];
+  }
+
+  .cta-primary {
+    @apply relative inline-flex items-center justify-center overflow-hidden rounded-full bg-brand-500 px-8 py-3.5 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)_inset,0_16px_40px_-12px_rgba(59,130,246,0.55)];
+  }
+
+  .cta-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-8 py-3.5 text-sm font-medium text-zinc-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] backdrop-blur-sm;
   }
 }

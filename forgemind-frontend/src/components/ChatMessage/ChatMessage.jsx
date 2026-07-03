@@ -4,16 +4,18 @@ export default function ChatMessage({ role, content }) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
-        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed sm:max-w-[75%] ${
+        className={`relative max-w-[85%] rounded-[2rem] border border-white/10 px-5 py-4 text-sm leading-7 shadow-[0_24px_60px_rgba(0,0,0,0.18)] ${
           isUser
             ? 'bg-brand-500 text-white'
-            : 'glass text-zinc-200'
+            : 'bg-white/[0.05] text-zinc-100 backdrop-blur-2xl'
         }`}
       >
         {!isUser && (
-          <p className="mb-1.5 text-xs font-medium text-brand-400">ForgeMind</p>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-brand-300">
+            ForgeMind
+          </p>
         )}
-        {content}
+        <p>{content}</p>
       </div>
     </div>
   )

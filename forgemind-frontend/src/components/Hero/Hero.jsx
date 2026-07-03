@@ -1,84 +1,104 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi2'
+import { AnimatedGradient } from '@/components/effects'
 import { ROUTES } from '@/utils/routes'
+import { heroItem, heroStagger } from '@/utils/motion'
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-svh items-center justify-center overflow-hidden px-4 pt-16 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0">
-        <motion.div
-          animate={{ x: [0, 80, 0], y: [0, -40, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-24 top-1/4 h-[28rem] w-[28rem] rounded-full bg-brand-600/25 blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -60, 0], y: [0, 50, 0], scale: [1, 1.15, 1] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -right-16 top-1/3 h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl"
-        />
-        <motion.div
-          animate={{ opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.12),transparent_60%)]"
-        />
-      </div>
+    <section className="relative flex min-h-svh items-center justify-center overflow-hidden px-4 pt-20 sm:px-6 sm:pt-24 lg:px-8">
+      <AnimatedGradient />
 
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-surface to-transparent" />
+
+      <motion.div
+        variants={heroStagger}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 mx-auto w-full max-w-5xl text-center"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-zinc-300 backdrop-blur-sm"
+          aria-hidden
+          animate={{
+            scale: [0.98, 1.04, 0.98],
+            opacity: [0.55, 0.92, 0.55],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute left-1/2 top-1/2 -z-10 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 shadow-[0_0_0_1px_rgba(96,165,250,0.12)] ring-1 ring-brand-400/20 blur-[90px]"
+        />
+
+        <motion.div
+          variants={heroItem}
+          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.05] px-5 py-2 text-sm text-zinc-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-400" />
+          </span>
           AI Career Operating System
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+          variants={heroItem}
+          className="text-display text-4xl leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.25rem]"
         >
           Orchestrate your career
-          <span className="block bg-gradient-to-r from-brand-400 via-blue-300 to-indigo-400 bg-clip-text text-transparent">
+          <span className="mt-4 block bg-gradient-to-r from-brand-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent sm:mt-5">
             with intelligent precision
           </span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg"
+          variants={heroItem}
+          className="text-body mx-auto mt-8 max-w-2xl text-base leading-8 text-zinc-300 sm:mt-10 sm:text-lg lg:max-w-3xl lg:text-xl"
         >
-          ForgeMind is not a chatbot. It is a career operating system that
-          coordinates specialized AI agents to analyze skills, plan sprints, and
-          forge your portfolio — all in one unified workspace.
+          ForgeMind is a premium AI career OS that coordinates your specialist
+          agents, maps growth, and turns your skills into portfolio-ready
+          momentum — all from one elegant workspace.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          variants={heroItem}
+          className="mt-14 flex flex-col items-center justify-center gap-4 sm:mt-16 sm:flex-row sm:gap-5"
         >
-          <Link
-            to={ROUTES.CAREER_CHAT}
-            className="group inline-flex items-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-semibold text-white shadow-xl shadow-brand-500/30 transition hover:bg-brand-600"
+          <motion.div
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 22 }}
           >
-            Start Your Journey
-            <HiArrowRight className="transition-transform group-hover:translate-x-0.5" />
-          </Link>
-          <a
-            href="#features"
-            className="rounded-full border border-white/10 px-8 py-3.5 text-sm font-medium text-zinc-300 transition hover:border-white/20 hover:text-white"
+            <Link to={ROUTES.CAREER_CHAT} className="cta-primary group gap-2.5">
+              <motion.span
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                initial={{ x: '-120%' }}
+                animate={{ x: '120%' }}
+                transition={{
+                  duration: 2.8,
+                  repeat: Infinity,
+                  repeatDelay: 1.4,
+                  ease: 'easeInOut',
+                }}
+              />
+              <span className="relative z-10">Start Your Journey</span>
+              <HiArrowRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.03, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 24 }}
           >
-            Explore Features
-          </a>
+            <a
+              href="#features"
+              className="cta-secondary transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            >
+              Explore Features
+            </a>
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   )
 }
