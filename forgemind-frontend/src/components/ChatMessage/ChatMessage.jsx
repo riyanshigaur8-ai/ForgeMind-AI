@@ -1,3 +1,5 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 export default function ChatMessage({ role, content }) {
   const isUser = role === 'user'
 
@@ -15,7 +17,12 @@ export default function ChatMessage({ role, content }) {
             ForgeMind
           </p>
         )}
-        <p>{content}</p>
+        {/* <p>{content}</p> */}
+        <div className="markdown">
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {content}
+  </ReactMarkdown>
+</div>
       </div>
     </div>
   )

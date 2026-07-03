@@ -1,6 +1,7 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 env_path = Path(__file__).resolve().parent.parent / ".env"
 
@@ -26,6 +27,16 @@ import google.genai.types as genai_types
 from forgemind_ai.agent import root_agent
 
 app = FastAPI(title='ForgeMind AI Backend')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 RUNNER = Runner(
     agent=root_agent,

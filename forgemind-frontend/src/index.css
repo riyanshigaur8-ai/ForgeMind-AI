@@ -58,3 +58,51 @@
     @apply inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-8 py-3.5 text-sm font-medium text-zinc-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] backdrop-blur-sm;
   }
 }
+.markdown {
+  line-height: 1.8;
+  color: #f3f4f6;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: .6rem;
+}
+
+.markdown p {
+  margin-bottom: .75rem;
+}
+
+.markdown ul {
+  padding-left: 1.4rem;
+  margin-bottom: .8rem;
+}
+
+.markdown ol {
+  padding-left: 1.4rem;
+  margin-bottom: .8rem;
+}
+
+.markdown li {
+  margin: .35rem 0;
+}
+
+.markdown strong {
+  color: white;
+}
+
+.markdown code {
+  background: rgba(255,255,255,.08);
+  padding: .15rem .35rem;
+  border-radius: 6px;
+  font-family: monospace;
+}
+
+.markdown pre {
+  overflow-x: auto;
+  background: #111827;
+  padding: 1rem;
+  border-radius: 10px;
+}

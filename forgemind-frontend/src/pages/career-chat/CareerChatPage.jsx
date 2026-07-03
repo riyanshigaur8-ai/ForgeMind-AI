@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { apiClient } from '@/services/api'
 import { useDocumentTitle } from '@/hooks'
 import { ChatBox, Navbar, Sidebar } from '@/components'
 import { MOCK_AGENTS, MOCK_MESSAGES, MOCK_REPLY } from '@/data/mock'
@@ -11,64 +12,54 @@ export default function CareerChatPage() {
   const [isTyping, setIsTyping] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
 
-  function handleSend(content) {
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content,
+  async function handleSend(content) {
+  const userMessage = {
+    id: `user-${Date.now()}`,
+    role: 'user',
+    content,
+  }
+
+  setMessages((current) => [...current, userMessage])
+
+  setIsTyping(true)
+  setIsProcessing(true)
+
+  try {
+    const response = await apiClient.sendMessage({
+      message: content,
+    })
+
+    const assistantMessage = {
+      id: `assistant-${Date.now()}`,
+      role: 'assistant',
+      content: response.response,
     }
 
-    setMessages((current) => [...current, userMessage])
-    setIsProcessing(true)
-    setIsTyping(true)
+    setMessages((current) => [...current, assistantMessage])
 
     setAgents((current) =>
-      current.map((agent) => {
-        if (agent.id === 'project-scout') {
-          return { ...agent, status: 'working', task: 'Curating a portfolio path' }
-        }
-
-        if (agent.id === 'sprint-planner') {
-          return { ...agent, status: 'working', task: 'Preparing sprint structure' }
-        }
-
-        return agent
-      }),
+      current.map((agent) => ({
+        ...agent,
+        status: 'completed',
+        task: 'Completed',
+      })),
     )
+  } catch (error) {
+    const assistantMessage = {
+      id: `assistant-${Date.now()}`,
+      role: 'assistant',
+      content:
+        '⚠️ Unable to connect to ForgeMind backend. Please make sure the backend server is running.',
+    }
 
-    setTimeout(() => {
-      setIsTyping(false)
-    }, 1200)
+    setMessages((current) => [...current, assistantMessage])
 
-    setTimeout(() => {
-      const assistantMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: MOCK_REPLY,
-      }
-
-      setMessages((current) => [...current, assistantMessage])
-      setIsProcessing(false)
-
-      setAgents((current) =>
-        current.map((agent) => {
-          if (agent.id === 'skill-lens') {
-            return { ...agent, status: 'completed', task: 'Skill gap analysis complete' }
-          }
-
-          if (agent.id === 'project-scout') {
-            return { ...agent, status: 'completed', task: 'Portfolio project set' }
-          }
-
-          if (agent.id === 'sprint-planner') {
-            return { ...agent, status: 'working', task: 'Fine-tuning the roadmap' }
-          }
-
-          return agent
-        }),
-      )
-    }, 2200)
+    console.error(error)
+  } finally {
+    setIsTyping(false)
+    setIsProcessing(false)
   }
+}
 
   return (
     <div className="flex h-svh flex-col">
