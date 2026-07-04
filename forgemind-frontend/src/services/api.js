@@ -14,9 +14,12 @@ export class ApiError extends Error {
 async function request(endpoint, options = {}) {
   const { headers, ...rest } = options
 
+  const token = localStorage.getItem('token')
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     ...rest,
@@ -32,7 +35,9 @@ async function request(endpoint, options = {}) {
     }
 
     throw new ApiError(
-      data?.message ?? `Request failed with status ${response.status}`,
+      data?.detail ??
+      data?.message ??
+      `Request failed with status ${response.status}`,
       response.status,
       data,
     )
@@ -46,8 +51,24 @@ async function request(endpoint, options = {}) {
 }
 
 export const apiClient = {
+  request,
+
   sendMessage(payload) {
     return request(API_ENDPOINTS.CHAT, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  },
+
+  register(payload) {
+    return request('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  },
+
+  login(payload) {
+    return request('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload),
     })

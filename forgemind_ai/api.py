@@ -2,6 +2,22 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from forgemind_ai.database import Base, engine
+from forgemind_ai.auth.routes import router as auth_router
+from forgemind_ai.auth import models
+import uuid
+from typing import Any
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+import google.adk.runners as runners
+import google.genai.types as genai_types
+from forgemind_ai.agent import root_agent
+from pathlib import Path
+from dotenv import load_dotenv
+from google.genai.errors import ServerError
+import os
 
 env_path = Path(__file__).resolve().parent.parent / ".env"
 
@@ -13,20 +29,11 @@ loaded = load_dotenv(dotenv_path=env_path)
 print("DOTENV LOADED:", loaded)
 print("GOOGLE_API_KEY:", os.getenv("GOOGLE_API_KEY"))
 
-import uuid
-from typing import Any
-
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
-import google.adk.runners as runners
-import google.genai.types as genai_types
-
-from forgemind_ai.agent import root_agent
-
 app = FastAPI(title='ForgeMind AI Backend')
+
+Base.metadata.create_all(bind=engine)
+
+app.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -78,46 +85,75 @@ def format_content(content: Any) -> str:
 
     return str(content).strip()
 
-
-@app.post('/api/chat', response_model=ChatResponse)
+@app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     message = request.message.strip()
+
     if not message:
-        raise HTTPException(status_code=400, detail='message is required')
+        raise HTTPException(
+            status_code=400,
+            detail="message is required",
+        )
 
     user_content = Content.model_construct(
         parts=[Part.from_text(text=message)],
-        role='user',
+        role="user",
     )
+
     session_id = uuid.uuid4().hex
 
     assistant_texts: list[str] = []
 
     try:
         async for event in RUNNER.run_async(
-            user_id='forgemind-user',
+            user_id="forgemind-user",
             session_id=session_id,
             new_message=user_content,
         ):
-            author = getattr(event, 'author', None)
-            if author == 'user':
+            author = getattr(event, "author", None)
+
+            if author == "user":
                 continue
 
-            text = format_content(getattr(event, 'message', None))
+            text = format_content(getattr(event, "message", None))
+
             if not text:
-                text = format_content(getattr(event, 'output', None))
+                text = format_content(getattr(event, "output", None))
 
             if text:
                 assistant_texts.append(text)
+
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+        error = str(exc).upper()
 
-    response_text = ' '.join(assistant_texts).strip()
+        print("ADK ERROR:", error)
+
+        if "503" in error or "UNAVAILABLE" in error:
+            return ChatResponse(
+                response="⚠️ ForgeMind AI is temporarily unavailable because Gemini is experiencing heavy traffic. Please try again in a minute.",
+                agent=root_agent.name,
+                status="busy",
+            )
+
+        if "429" in error:
+            return ChatResponse(
+                response="⚠️ ForgeMind AI has reached its API quota. Please try again later.",
+                agent=root_agent.name,
+                status="quota",
+            )
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(exc),
+        )
+
+    response_text = " ".join(assistant_texts).strip()
+
     if not response_text:
-        response_text = 'No response was generated.'
+        response_text = "No response was generated."
 
-    return {
-        'response': response_text,
-        'agent': root_agent.name,
-        'status': 'success',
-    }
+    return ChatResponse(
+        response=response_text,
+        agent=root_agent.name,
+        status="success",
+    )
