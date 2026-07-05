@@ -67,7 +67,7 @@ export default function Hero() {
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 420, damping: 22 }}
           >
-            <Link to={ROUTES.CAREER_CHAT} className="cta-primary group gap-2.5">
+            <Link to={ROUTES.REGISTER} className="cta-primary group gap-2.5">
               <motion.span
                 aria-hidden
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"

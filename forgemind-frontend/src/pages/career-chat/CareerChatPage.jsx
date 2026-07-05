@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { apiClient } from '@/services/api'
 import { useDocumentTitle } from '@/hooks'
-import { ChatBox, Navbar, Sidebar } from '@/components'
+import { ChatBox,Navbar, Sidebar } from '@/components'
 import { MOCK_AGENTS, MOCK_MESSAGES, MOCK_REPLY } from '@/data/mock'
 
 export default function CareerChatPage() {
@@ -63,7 +63,7 @@ export default function CareerChatPage() {
 
   return (
     <div className="flex h-svh flex-col">
-      <Navbar />
+       <Navbar /> 
 
       <div className="flex min-h-0 flex-1 flex-col pt-16 lg:flex-row">
         <main className="glass-strong min-h-0 flex-1 lg:rounded-none">

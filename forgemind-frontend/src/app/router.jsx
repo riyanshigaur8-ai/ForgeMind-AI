@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
-
+import WorkspaceLayout from "@/layouts/WorkspaceLayout";
 import { MainLayout, AuthLayout } from '@/layouts'
 import { ProtectedRoute } from '@/components'
 import { lazyRoute } from './LazyRoute'
@@ -14,9 +14,26 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: '/profile',
-        element: lazyRoute(() => import('@/pages/profile')),
-      },
+  element: (
+    <ProtectedRoute>
+      <WorkspaceLayout />
+    </ProtectedRoute>
+  ),
+  children: [
+    {
+      path: "/dashboard",
+      element: lazyRoute(() => import("@/pages/dashboard")),
+    },
+    {
+      path: "/profile",
+      element: lazyRoute(() => import("@/pages/profile")),
+    },
+    {
+      path: "/career-chat",
+      element: lazyRoute(() => import("@/pages/career-chat")),
+    },
+  ],
+},
       {
         element: (
           <ProtectedRoute />
