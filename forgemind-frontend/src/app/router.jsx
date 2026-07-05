@@ -14,6 +14,10 @@ export const router = createBrowserRouter([
       },
 
       {
+        path: '/profile',
+        element: lazyRoute(() => import('@/pages/profile')),
+      },
+      {
         element: (
           <ProtectedRoute />
         ),
