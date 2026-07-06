@@ -35,10 +35,14 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router)
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "https://forgemind-ai-two.vercel.app",
+        "https://forgemind-ai-git-main-riyanshi.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
