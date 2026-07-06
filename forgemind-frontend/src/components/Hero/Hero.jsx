@@ -90,13 +90,39 @@ export default function Hero() {
             whileTap={{ scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 420, damping: 24 }}
           >
-            <a
-              href="#features"
-              className="cta-secondary transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="cta-secondary group cursor-not-allowed opacity-70"
             >
-              Explore Features
-            </a>
+              <span>Watch Demo</span>
+              <span className="ml-2.5 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
+                Coming Soon
+              </span>
+            </button>
           </motion.div>
+        </motion.div>
+
+        <motion.div
+          variants={heroItem}
+          className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm sm:mt-7"
+        >
+          <span className="mr-1 text-xs font-medium uppercase tracking-[0.24em] text-zinc-500">
+            Powered by
+          </span>
+          {['Google ADK', 'Gemini AI', 'React', 'FastAPI'].map((item, index) => (
+            <div key={item} className="flex items-center gap-2">
+              {index > 0 && (
+                <span className="text-zinc-600" aria-hidden>
+                  •
+                </span>
+              )}
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-zinc-300 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] backdrop-blur-lg">
+                {item}
+              </span>
+            </div>
+          ))}
         </motion.div>
       </motion.div>
     </section>
