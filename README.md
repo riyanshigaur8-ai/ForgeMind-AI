@@ -34,7 +34,7 @@ A root agent (`forgemind_ai/agent.py`) built on **Google ADK's native sub-agent 
 
 Each specialist is a real ADK `Agent` with its own model config and dedicated prompt module (`forgemind_ai/prompts/`), and all four are registered as `sub_agents` of the root orchestrator — so routing is handled natively by ADK rather than hand-rolled if/else logic.
 
-> Note: an earlier prototype router (`forgemind_ai/core/router.py`, `core/orchestrator.py`) only forwarded every request to SkillLens and predates the ADK sub-agent setup. It's no longer used by the live API and is kept for reference — safe to delete before final submission to avoid confusing reviewers.
+> Note: an earlier prototype router (`forgemind_ai/core/router.py`, `core/orchestrator.py`) only forwarded every request to SkillLens and predates the ADK sub-agent setup. It's no longer used by the live API.
 
 ---
 
@@ -61,38 +61,42 @@ Each specialist is a real ADK `Agent` with its own model config and dedicated pr
 * CORS restricted to known frontend origins (localhost + the two deployed Vercel domains)
 * Graceful handling of upstream Gemini errors (503/429) without leaking internals to the client
 
----
-
-## 🌐 Deployability
-
-* **Frontend:** live on Vercel (`vercel.json` configured for SPA routing), with a second preview deployment URL also whitelisted in CORS.
-* **Backend:** runs via FastAPI/Uvicorn locally; no `Procfile`/`Dockerfile`/`render.yaml` is committed yet, so document your exact backend run command (or add one) so judges can reproduce it.
+One known issue to fix going forward: `SECRET_KEY` in `auth/security.py` is currently a hardcoded placeholder string. It should be moved to an environment variable (`.env`, already gitignored) rather than sitting in the code.
 
 ---
 
-## 📅 Development Roadmap
+## 🌐 Deployability (Live)
 
-### Phase 1 — Done
-* [x] Project setup, ADK configuration, Gemini integration, repo created
+* **Frontend:** deployed on Vercel → **https://forgemind-ai-two.vercel.app/**
+  (`vercel.json` configured for SPA routing; a second preview deployment URL is also whitelisted in CORS)
+* **Backend:** deployed on Render → **https://forgemind-ai-ll9v.onrender.com**
+  FastAPI + Uvicorn service backing the frontend's auth and agent chat calls.
 
-### Phase 2 — Done
-* [x] SkillLens, ProjectScout, SprintPlanner, PortfolioForge built and wired into root agent
+> ⚠️ **Render free-tier note:** the backend spins down after ~15 min of inactivity and takes 30–60 seconds to wake on the first request after a period of no traffic.
 
-### Phase 3 — Partially done
-* [x] Multi-agent orchestration (ADK sub-agent delegation)
-* [x] Core security (JWT + bcrypt auth)
-* [ ] MCP integration
+No `Procfile`/`Dockerfile`/`render.yaml` is committed to the repo yet — build/start commands and environment variables (`SECRET_KEY`, `GEMINI_API_KEY`, etc.) are currently configured directly in the Render/Vercel dashboards. Adding one would make it easier for someone else to redeploy the exact setup from the repo alone.
 
-### Phase 4 — Partially done
-* [x] Frontend built (React, deployed to Vercel)
-* [ ] Backend deployment config committed
-* [ ] Kaggle capstone submission
+---
+
+## 🔭 Known Limitations & Future Work
+
+* **MCP Server** — not yet implemented; a natural next integration for connecting agents to external tools/data sources.
+* **Tools directory is scaffolded but empty** — `tools/github_tool.py`, `pdf_reader.py`, `resume_parser.py`, and `web_search.py` are placeholders for future capabilities (GitHub browsing, PDF/resume parsing, live web search).
+* **No CLI entrypoint** yet for direct agent invocation outside the web app.
+* **ResumeLens** agent is stubbed but not implemented.
+
+---
+
+## 🔗 Live Links
+
+* **Frontend (try it live):** https://forgemind-ai-two.vercel.app/
+* **Backend API:** https://forgemind-ai-ll9v.onrender.com
 
 ---
 
 ## 📈 Project Status
 
-Core multi-agent system, backend API, auth, and frontend are functional. Remaining work before submission: MCP (or reframe scope), clean up dead prototype code, document backend deployment, and record the demo video.
+Core multi-agent system, backend API, auth, and frontend are functional and **both are live in production**.
 
 ---
 
